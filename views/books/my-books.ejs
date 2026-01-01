@@ -1,0 +1,217 @@
+<%- include('../layout') %>
+
+<style>
+  :root {
+    --black: #0f0f1a;
+    --dark: #1a1a2e;
+    --red-primary: #dc2626;
+    --red-accent: #ef4444;
+    --gold-accent: #f59e0b;
+    --text-muted-soft: rgba(156, 163, 175, 0.8);
+  }
+
+  body {
+    background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+    color: #f8fafc;
+    min-height: 100vh;
+  }
+
+  .dashboard-header {
+    padding-top: 100px;
+    margin-bottom: 40px;
+  }
+
+  .text-gradient-red {
+    background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Manager Card Styling */
+  .manager-card {
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .manager-card:hover {
+    transform: translateX(5px);
+    border-color: rgba(220, 38, 38, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .manager-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--red-primary), var(--gold-accent));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .manager-card:hover::before {
+    opacity: 1;
+  }
+
+  .book-thumb {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Action Buttons */
+  .btn-action {
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+  }
+
+  .btn-view {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+  }
+
+  .btn-view:hover {
+    background: white;
+    color: var(--black);
+  }
+
+  .btn-edit {
+    border: 1px solid var(--gold-accent);
+    color: var(--gold-accent);
+  }
+
+  .btn-edit:hover {
+    background: var(--gold-accent);
+    color: var(--black);
+  }
+
+  .btn-delete {
+    border: 1px solid var(--red-primary);
+    color: var(--red-primary);
+  }
+
+  .btn-delete:hover {
+    background: var(--red-primary);
+    color: white;
+  }
+
+  .empty-state {
+    padding: 60px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+  }
+
+  .animate-up {
+    animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<main class="container dashboard-header">
+  <div class="row align-items-center mb-5 animate-up">
+    <div class="col-md-8">
+      <h1 class="display-6 fw-800 m-0">My <span class="text-gradient-red">Inventory</span></h1>
+      <p class="text-muted-soft">Manage and monitor your listed books.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+      <a href="/books/add" class="btn btn-primary-elegant px-4 py-2">
+        <i class="bi bi-plus-lg me-2"></i>List New Book
+      </a>
+    </div>
+  </div>
+
+  <% if (books.length === 0) { %>
+    <div class="empty-state animate-up">
+      <i class="bi bi-book-fill display-1 text-muted-soft mb-4"></i>
+      <h3 class="text-white">No books in your collection yet</h3>
+      <p class="text-muted-soft mb-4">Ready to start selling or donating? List your first book today.</p>
+      <a href="/books/add" class="btn btn-primary-elegant px-5">Add First Book</a>
+    </div>
+  <% } else { %>
+
+    <div class="row g-4">
+      <% books.forEach((book, index) => { %>
+        <div class="col-lg-6 animate-up" style="animation-delay: <%= index * 0.1 %>s;">
+          <div class="card manager-card h-100 p-3">
+            <div class="card-body">
+              <div class="row g-3 align-items-center">
+                
+                <div class="col-sm-4">
+                  <% if (book.image) { %>
+                    <img src="<%= book.image %>" class="book-thumb shadow" alt="<%= book.title %>" />
+                  <% } else { %>
+                    <div class="book-thumb bg-dark d-flex align-items-center justify-content-center">
+                      <i class="bi bi-image text-muted fs-2"></i>
+                    </div>
+                  <% } %>
+                </div>
+
+                <div class="col-sm-8">
+                  <div class="d-flex justify-content-between">
+                    <span class="badge bg-dark-subtle text-black border border-secondary mb-2">
+                        <%= book.category %>
+                    </span>
+                    <% if (book.isFree) { %>
+                        <span class="text-success small fw-bold"><i class="bi bi-heart-fill me-1"></i>DONATION</span>
+                    <% } %>
+                  </div>
+
+                  <h5 class="fw-bold text-white mb-1"><%= book.title %></h5>
+                  
+                  <p class="text-white-50 small mb-3">
+                    <%= book.description ? book.description.substring(0, 80) + '...' : 'No description provided.' %>
+                  </p>
+
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="fs-5 fw-800 text-white">
+                        <%= book.isFree ? 'FREE' : '₹' + book.price %>
+                    </span>
+                  </div>
+
+                  <div class="d-flex gap-2">
+                    <!-- <a href="/books/<%= book._id %>" class="btn btn-action btn-view flex-grow-1">
+                      <i class="bi bi-eye"></i>
+                    </a> -->
+                    <a href="/books/edit/<%= book._id %>" class="btn btn-action btn-edit flex-grow-1">
+                      <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <form
+                      method="POST"
+                      action="/books/<%= book._id %>?_method=DELETE"
+                      onsubmit="return confirm('Archive this listing?')"
+                      class="flex-grow-1"
+                    >
+                      <button class="btn btn-action btn-delete w-100">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </form>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+  <% } %>
+</main>

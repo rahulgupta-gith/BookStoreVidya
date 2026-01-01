@@ -1,0 +1,211 @@
+<%- include('../layout') %>
+
+<style>
+    :root {
+        --black: #0f0f1a;
+        --dark: #1a1a2e;
+        --red-primary: #dc2626;
+        --red-accent: #ef4444;
+        --gold-accent: #f59e0b;
+        --text-muted-soft: rgba(156, 163, 175, 0.8);
+    }
+
+    body {
+        background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+        color: #f8fafc;
+        min-height: 100vh;
+    }
+
+    .text-gradient-red {
+        background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Category Navigation */
+    .category-scroll {
+        display: flex;
+        overflow-x: auto;
+        gap: 1.5rem;
+        padding: 20px 0;
+        scrollbar-width: none; /* Firefox */
+    }
+    .category-scroll::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    .category-item {
+        flex: 0 0 auto;
+        text-align: center;
+        text-decoration: none;
+        color: var(--text-muted-soft);
+        transition: all 0.3s ease;
+        padding: 15px 25px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        min-width: 110px;
+    }
+
+    .category-item i {
+        display: block;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .category-item span { font-size: 0.85rem; font-weight: 500; }
+
+    .category-item:hover, .category-item.active {
+        background: rgba(220, 38, 38, 0.1);
+        border-color: var(--red-primary);
+        color: white;
+        transform: translateY(-5px);
+    }
+
+    .category-item.active i { color: var(--red-accent); }
+    .category-item.donate-active {
+        border-color: #198754;
+        background: rgba(25, 135, 84, 0.1);
+    }
+
+    /* Floating Add Button */
+    .btn-add-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+        color: white;
+        box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+        transition: all 0.3s ease;
+        border: none;
+    }
+    .btn-add-float:hover {
+        transform: scale(1.1) rotate(90deg);
+        color: white;
+    }
+
+    /* Card Styling (Same as previous but keeping consistency) */
+    .gallery-header { padding-top: 110px; }
+    .book-card {
+        backdrop-filter: blur(16px);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        overflow: hidden;
+    }
+    .image-wrapper { height: 260px; position: relative; overflow: hidden; }
+    .book-img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+    .book-card:hover .book-img { transform: scale(1.1); }
+    .book-title { font-weight: 700; color: white; margin-top: 10px; }
+    .btn-primary-elegant {
+        background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+        border: none; border-radius: 12px; font-weight: 600; color: white;
+    }
+
+    .animate-up { animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) both; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<a href="/books/add" class="btn-add-float shadow-lg" title="Add to Collection">
+    <i class="bi bi-plus-lg fs-3"></i>
+</a>
+
+<main class="container gallery-header">
+    <div class="text-center mb-4 animate-up">
+        <h1 class="display-5 fw-800">Elite <span class="text-gradient-red">Collection</span></h1>
+        <p class="text-muted-soft">Explore the world's most sought-after literary treasures.</p>
+    </div>
+
+    <div class="category-scroll mb-5 animate-up">
+        <a href="/books" class="category-item active">
+            <i class="bi bi-grid-fill"></i>
+            <span>All Books</span>
+        </a>
+        <a href="/books?category=Novel" class="category-item">
+            <i class="bi bi-book"></i>
+            <span>Novels</span>
+        </a>
+        <a href="/books?category=Philosophy" class="category-item">
+            <i class="bi bi-mortarboard"></i>
+            <span>Philosophy</span>
+        </a>
+        <a href="/books?category=History" class="category-item">
+            <i class="bi-archive"></i>
+            <span>History</span>
+        </a>
+        <a href="/books?category=10th" class="category-item">
+            <i class="bi bi-journal-text"></i>
+            <span>10th Grade</span>
+        </a>
+        
+        <a href="/books?category=12th" class="category-item">
+            <i class="bi bi-journal-bookmark"></i>
+            <span>12th Grade</span>
+        </a>
+        <a href="/books?category=Engineering" class="category-item">
+            <i class="bi bi-gear-wide-connected"></i>
+            <span>Engineering</span>
+        </a>
+        <a href="/books?category=Medical" class="category-item">
+            <i class="bi bi-capsule"></i>
+            <span>Medical</span>
+        </a>
+        <a href="/books?isFree=true" class="category-item donate-active">
+            <i class="bi bi-heart-pulse-fill text-success"></i>
+            <span class="text-success">Donate</span>
+        </a>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <% if(books.length === 0) { %>
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-search fs-1 text"></i>
+                <h4 class="mt-3 text">No books found in this category.</h4>
+            </div>
+        <% } %>
+
+        <% books.forEach((book, index) => { %>
+            <div class="col-lg-4 col-md-6 animate-up" style="animation-delay: <%= index * 0.1 %>s;">
+                <div class="card h-100 book-card">
+                    <div class="image-wrapper">
+                        <% if (book.image) { %>
+                            <img src="<%= book.image %>" class="book-img" alt="<%= book.title %>">
+                        <% } else { %>
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-dark text-muted">
+                                <i class="bi bi-image fs-1"></i>
+                            </div>
+                        <% } %>
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-dark border border-secondary px-2 py-1"><%= book.category %></span>
+                        </div>
+                    </div>
+
+                    <div class="card-body d-flex flex-column p-4">
+                        <h5 class="book-title"><%= book.title %></h5>
+                        
+                        <div class="my-3">
+                            <% if (book.isFree) { %>
+                                <span class="text-success fw-bold"><i class="bi bi-gift me-1"></i>Free Donation</span>
+                            <% } else { %>
+                                <div class="price-tag text-gradient-red">₹ <%= book.price %></div>
+                            <% } %>
+                        </div>
+
+                        <div class="mt-auto">
+                            <a href="/books/<%= book._id %>" class="btn btn-primary-elegant w-100 py-2">
+                                <%= book.isFree ? "Claim Gift" : "Acquire Now" %>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</main>

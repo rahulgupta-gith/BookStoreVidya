@@ -1,0 +1,234 @@
+<%- include('../layout') %>
+
+<style>
+    :root {
+        --black: #0f0f1a;
+        --dark: #1a1a2e;
+        --red-primary: #dc2626;
+        --red-accent: #ef4444;
+        --gold-accent: #f59e0b;
+        --text-muted-soft: rgba(156, 163, 175, 0.8);
+    }
+
+    body {
+        background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+        color: #f8fafc;
+        min-height: 100vh;
+    }
+
+    .form-section {
+        padding: 100px 0 60px;
+    }
+
+    .text-gradient-red {
+        background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Glassmorphism Card */
+    .elegant-card {
+        backdrop-filter: blur(16px);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Top Accent Line */
+    .elegant-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--red-primary), var(--gold-accent));
+    }
+
+    /* Form Controls */
+    .form-label {
+        color: var(--text-muted-soft);
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        background: rgba(15, 15, 26, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white !important;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(15, 15, 26, 0.8);
+        border-color: var(--red-primary);
+        box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+    }
+
+    /* Dropdown Options styling */
+    .form-select option {
+        background: var(--dark);
+        color: white;
+    }
+
+    /* Custom Switch */
+    .form-check-input:checked {
+        background-color: var(--red-primary);
+        border-color: var(--red-primary);
+    }
+
+    /* Buttons */
+    .btn-primary-elegant {
+        background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+        border: none;
+        border-radius: 12px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+    }
+
+    .btn-primary-elegant:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+        color: white;
+    }
+
+    .animate-up {
+        animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    #preview-container {
+        border: 2px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 10px;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="container form-section">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            <div class="text-center mb-5 animate-up">
+                <h1 class="fw-800 display-6">List a <span class="text-gradient-red">New Book</span></h1>
+                <p class="text-muted-soft">Share your knowledge with the global collector community.</p>
+            </div>
+
+            <div class="elegant-card animate-up">
+                <form method="POST" action="/books/add" enctype="multipart/form-data">
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Book Title <span class="text-danger">*</span></label>
+                        <input type="text" name="title" class="form-control" placeholder="e.g. The Art of Innovation" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="10th">10th</option>
+                                <option value="12th">12th</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Medical">Medical</option>
+                                <option value="Novel">Novel</option>
+                                <option value="Self Help">Self Help</option>
+                                <option value="Philosophy">Philosophy</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">Price (₹)</label>
+                            <input type="number" name="price" class="form-control" placeholder="0.00" id="priceInput" />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Description</label>
+                        <textarea 
+                            name="description" 
+                            class="form-control" 
+                            rows="4"
+                            placeholder="Tell potential readers what makes this book special..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-check form-switch mb-4 py-2">
+                        <input class="form-check-input" type="checkbox" name="isFree" value="true" id="isFree" onchange="togglePrice()">
+                        <label class="form-check-label fw-medium ms-2" for="isFree">
+                            This is a <span class="text-success">Free Donation</span>
+                        </label>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Book Cover Photo</label>
+                        <input 
+                            type="file" 
+                            name="image" 
+                            class="form-control"
+                            accept="image/*"
+                            onchange="previewImage(event)"
+                        />
+                        
+                        <div id="preview-container" class="text-center" style="display:none;">
+                            <p class="small text-muted mb-2">Cover Preview</p>
+                            <img id="preview" src="" alt="Preview" style="max-height:250px; border-radius:12px;" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <a href="/books" class="text-muted-soft text-decoration-none small">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Gallery
+                        </a>
+                        <button type="submit" class="btn btn-primary-elegant">
+                            <i class="bi bi-cloud-upload me-2"></i> Publish Listing
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="text-center mt-4 animate-up">
+                <p class="small text-muted-soft">
+                    <i class="bi bi-shield-check me-1"></i> Your listing will be visible to all verified collectors.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Live Image Preview
+    function previewImage(event) {
+        const container = document.getElementById('preview-container');
+        const img = document.getElementById('preview');
+        img.src = URL.createObjectURL(event.target.files[0]);
+        container.style.display = 'block';
+    }
+
+    // Interactive Price Toggle
+    function togglePrice() {
+        const isFree = document.getElementById('isFree').checked;
+        const priceInput = document.getElementById('priceInput');
+        if (isFree) {
+            priceInput.value = 0;
+            priceInput.disabled = true;
+            priceInput.style.opacity = '0.5';
+        } else {
+            priceInput.disabled = false;
+            priceInput.style.opacity = '1';
+        }
+    }
+</script>

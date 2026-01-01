@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign In | BookStore Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --black: #0f0f1a;
+      --dark: #1a1a2e;
+      --red-primary: #dc2626;
+      --red-accent: #ef4444;
+      --gold-accent: #f59e0b;
+      --text-muted: rgba(156,163,175,0.8);
+    }
+
+    body {
+      background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .elegant-nav {
+      backdrop-filter: blur(20px);
+      background: rgba(15,15,26,0.95);
+      border-bottom: 1px solid rgba(220,38,38,0.2);
+    }
+
+    .brand-text {
+      background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .auth-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 100px 0 50px;
+      background: radial-gradient(circle at bottom left, rgba(220,38,38,0.07), transparent 500px);
+    }
+
+    .login-card {
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 3.5rem;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    /* Elegant Top Border */
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 24px 24px 0 0;
+      background: linear-gradient(90deg, transparent, var(--red-primary), var(--gold-accent), transparent);
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-control {
+      background: rgba(15,15,26,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: white;
+      padding: 0.85rem 1.2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .form-control:focus {
+      background: rgba(15,15,26,0.9);
+      border-color: var(--red-primary);
+      box-shadow: 0 0 20px rgba(220,38,38,0.15);
+      color: white;
+    }
+
+    .text-gradient-red {
+      background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary-elegant {
+      background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+      border: none;
+      border-radius: 12px;
+      padding: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.4s ease;
+    }
+
+    .btn-primary-elegant:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(220,38,38,0.35);
+    }
+
+    .forgot-link {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .forgot-link:hover {
+      color: var(--red-accent);
+    }
+
+    /* Animations */
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="dark-elegance">
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top elegant-nav">
+  <div class="container">
+    <a class="navbar-brand fs-3 brand-text" href="/">
+      <i class="bi bi-book-half me-2"></i>BookStore
+    </a>
+  </div>
+</nav>
+
+<main class="auth-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-4 col-lg-5 col-md-7">
+        
+        <div class="text-center mb-5 animate-fade-in">
+          <h1 class="fw-900 mb-2">Welcome <span class="text-gradient-red">Back</span></h1>
+          <p class="text-muted-soft">Enter your credentials to access your library.</p>
+        </div>
+
+        <div class="login-card animate-fade-in">
+          <form action="/auth/login" method="post"">
+            <div class="mb-4">
+              <label class="form-label">Email Address</label>
+              <div class="input-group">
+                <input type="email" name="email" class="form-control" placeholder="name@domain.com" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <label class="form-label">Password</label>
+                <a href="#" class="forgot-link">Forgot?</a>
+              </div>
+              <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remember">
+                <label class="form-check-label small text-muted-soft" for="remember">
+                  Keep me signed in
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary-elegant w-100 mb-4">
+              Sign In to Collection
+            </button>
+
+            <div class="text-center">
+              <p class="small text-muted-soft mb-0">
+                New to the marketplace? 
+                <a href="/auth/register" class="text-gradient-red text-decoration-none fw-bold ms-1">Create Account</a>
+              </p>
+            </div>
+          </form>
+        </div>
+
+        <div class="text-center mt-5 animate-fade-in" style="animation-delay: 0.3s;">
+          <div class="d-flex justify-content-center gap-4">
+            <i class="bi bi-shield-check text-muted-soft" title="Secure Connection"></i>
+            <i class="bi bi-fingerprint text-muted-soft" title="Biometric Ready"></i>
+            <i class="bi bi-patch-check text-muted-soft" title="Verified Seller"></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<%- include('../layout') %>
+
+<style>
+    :root {
+        --black: #0f0f1a;
+        --dark-glass: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --red-primary: #dc2626;
+        --red-accent: #ef4444;
+    }
+
+    body {
+        background: radial-gradient(circle at top center, #1e1e3f 0%, var(--black) 100%);
+        color: #f8fafc;
+        min-height: 100vh;
+    }
+
+    .edit-container {
+        padding-top: 120px;
+        padding-bottom: 60px;
+        max-width: 700px;
+    }
+
+    .glass-card {
+        background: var(--dark-glass);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        color: white;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--red-primary);
+        box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+        color: white;
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Custom Checkbox */
+    .form-check-input {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--glass-border);
+    }
+
+    .form-check-input:checked {
+        background-color: var(--red-primary);
+        border-color: var(--red-primary);
+    }
+
+    /* Buttons */
+    .btn-update {
+        background: linear-gradient(135deg, var(--red-primary), var(--red-accent));
+        border: none;
+        border-radius: 12px;
+        padding: 12px 30px;
+        font-weight: 700;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 12px 30px;
+        color: white;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="container edit-container animate-fade-in">
+    <div class="glass-card">
+        <div class="d-flex align-items-center mb-4">
+            <div class="icon-box me-3" style="width: 50px; height: 50px; background: rgba(220, 38, 38, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--red-primary);">
+                <i class="bi bi-pencil-square fs-4"></i>
+            </div>
+            <h2 class="fw-bold m-0">Edit <span class="text-gradient-red">Listing</span></h2>
+        </div>
+
+        <form method="POST" action="/books/edit/<%= book._id %>">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <label class="form-label">BOOK TITLE</label>
+                    <input type="text" name="title" class="form-control" value="<%= book.title %>" required>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">CATEGORY</label>
+                    <select name="category" class="form-select" required>
+                        <option value="Novel" <%= book.category === 'Novel' ? 'selected' : '' %>>Novel</option>
+                        <option value="Philosophy" <%= book.category === 'Philosophy' ? 'selected' : '' %>>Philosophy</option>
+                        <option value="10th" <%= book.category === '10th' ? 'selected' : '' %>>10th Grade</option>
+                        <option value="12th" <%= book.category === '12th' ? 'selected' : '' %>>12th Grade</option>
+                        <option value="Engineering" <%= book.category === 'Engineering' ? 'selected' : '' %>>Engineering</option>
+                        <option value="Medical" <%= book.category === 'Medical' ? 'selected' : '' %>>Medical</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">CONDITION</label>
+                    <select name="condition" class="form-select" required>
+                        <option <%= book.condition === "New" ? "selected" : "" %>>New</option>
+                        <option <%= book.condition === "Used" ? "selected" : "" %>>Used</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mb-4">
+                    <div class="glass-inner p-3 rounded-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="isFreeSwitch" name="isFree" <%= book.isFree ? "checked" : "" %>>
+                            <label class="form-check-label fw-bold text-white" for="isFreeSwitch">
+                                <i class="bi bi-gift-fill text-success me-2"></i>Mark as Free / Donation
+                            </label>
+                        </div>
+                        
+                        <div id="priceWrapper" style="<%= book.isFree ? 'display: none;' : '' %>">
+                            <label class="form-label">PRICE (₹)</label>
+                            <input type="number" name="price" id="priceInput" class="form-control" value="<%= book.price || '' %>" placeholder="Enter amount">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-4">
+                    <label class="form-label">DESCRIPTION</label>
+                    <textarea name="description" class="form-control" rows="4" placeholder="Briefly describe the book's condition or edition..."><%= book.description || "" %></textarea>
+                </div>
+
+                <div class="col-12 d-flex gap-3 mt-2">
+                    <button type="submit" class="btn btn-update flex-grow-1">
+                        Save Changes
+                    </button>
+                    <a href="/books/my-books" class="btn btn-cancel">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Intelligent Price Toggle
+    const freeSwitch = document.getElementById('isFreeSwitch');
+    const priceWrapper = document.getElementById('priceWrapper');
+    const priceInput = document.getElementById('priceInput');
+
+    freeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+            priceWrapper.style.display = 'none';
+            priceInput.value = ''; // Clear price if marked free
+        } else {
+            priceWrapper.style.display = 'block';
+        }
+    });
+</script>
