@@ -16,7 +16,7 @@ exports.register = async (req, res) => {
     isApproved: role === "vendor" ? false : true
   });
 
-   res.redirect("/books");
+   res.redirect("/auth/login");
   }catch(error){
     console.log(error);
     res.redirect("/auth/register");
@@ -31,10 +31,7 @@ const { email, password } = req.body;
 
   if (!user || !(await bcrypt.compare(password, user.password)))
     return res.send("Invalid Credentials");
-
-  if (user.role === "vendor" && !user.isApproved)
-    return res.send("Vendor not approved");
-  const token = jwt.sign(
+   const token = jwt.sign(
     { id: user._id },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
@@ -45,6 +42,13 @@ const { email, password } = req.body;
     secure: false,
     maxAge: 24 * 60 * 60 * 1000
   });
+
+if (user.role === "vendor" && !user.isVerified) {
+    return res.render("auth/pending-approval", { user: user });
+}
+if(user.role === "vendor" && user.isBlocked){
+  return res.render("auth/pending-approval", {user:user});
+}
   res.redirect("/books");
   }catch(error){
     console.log(error);

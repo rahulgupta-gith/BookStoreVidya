@@ -4,7 +4,7 @@ exports.getDashboard = async (req, res) => {
   try {
     const users = await User.find({ role: "user" }).sort({ createdAt: -1 });
     const vendors = await User.find({ role: "vendor" }).sort({ createdAt: -1 });
-
+    console.log(req);
     res.render("admin/dashboard", {
       users,
       vendors
