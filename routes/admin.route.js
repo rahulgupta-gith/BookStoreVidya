@@ -18,3 +18,6 @@ router.post("/vendor/verify/:id", isAdmin, verifyVendor);
 router.post("/vendor/block/:id", isAdmin, toggleBlockVendor);
 
 module.exports = router;
+try{
+  
+}
